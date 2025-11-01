@@ -1,0 +1,17 @@
+# General
+.DS_Store
+Thumbs.db
+
+# Python venvs
+.venv/
+env/
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Backup artifacts
+dist/
+tmp/
