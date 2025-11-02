@@ -159,12 +159,11 @@ main() {
 
   resolve_version
   log "Installing backup-sqrt version ${VERSION_RESOLVED}"
-  local tmpdir
-  tmpdir=$(mktemp -d)
-  trap 'rm -rf "$tmpdir"' EXIT
+  TMPDIR_WORK=$(mktemp -d)
+  trap '[[ -n ${TMPDIR_WORK:-} ]] && rm -rf "$TMPDIR_WORK"' EXIT
 
-  download_release "$tmpdir"
-  install_files "$tmpdir"
+  download_release "$TMPDIR_WORK"
+  install_files "$TMPDIR_WORK"
   configure_cron
 
   log "Installation complete."
