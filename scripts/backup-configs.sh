@@ -180,7 +180,7 @@ process_profile() {
   if ! run_as_user "$PROFILE_USER" test -r "$DUPLY_DIR"; then
     abort "User $PROFILE_USER cannot read $DUPLY_DIR"
   fi
-  if ! run_as_user "$PROFILE_USER" rsync -a --acls --xattrs --owner --group "$DUPLY_DIR"/ "$profile_stage/duply/$duply_basename/"; then
+  if ! rsync -a --acls --xattrs --owner --group "$DUPLY_DIR"/ "$profile_stage/duply/$duply_basename/"; then
     abort "Failed to copy duply dir for $PROFILE_NAME"
   fi
 
@@ -191,11 +191,11 @@ process_profile() {
     echo "[$PROFILE_NAME] Collecting include $include as $include_owner"
     mkdir -p "$(dirname "$include_stage")"
     if [[ -d "$include" ]]; then
-      if ! run_as_user "$include_owner" rsync -a --acls --xattrs --owner --group "$include"/ "$include_stage/"; then
+      if ! rsync -a --acls --xattrs --owner --group "$include"/ "$include_stage/"; then
         abort "Failed to copy include dir '$include'"
       fi
     else
-      if ! run_as_user "$include_owner" rsync -a --acls --xattrs --owner --group "$include" "$include_stage"; then
+      if ! rsync -a --acls --xattrs --owner --group "$include" "$include_stage"; then
         abort "Failed to copy include file '$include'"
       fi
     fi
