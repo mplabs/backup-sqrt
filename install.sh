@@ -76,7 +76,23 @@ download_release() {
   local checksum_file="${target}.sha256"
   if curl -fL "$checksum_url" -o "$checksum_file"; then
     log "Verifying checksum"
-    (cd "$tmpdir" && sha256sum -c "$(basename "$checksum_file")")
+    local checksum_basename
+    checksum_basename="$(basename "$checksum_file")"
+    (
+      set +e
+      cd "$tmpdir" || exit 1
+      sha256sum -c "$checksum_basename"
+      status=$?
+      if [[ $status -ne 0 ]]; then
+        if grep -q ' dist/' "$checksum_basename"; then
+          awk '{ if (NF >= 2) { sub(/^dist\//, "", $2) } print }' "$checksum_basename" > "${checksum_basename}.tmp"
+          mv "${checksum_basename}.tmp" "$checksum_basename"
+          sha256sum -c "$checksum_basename"
+          exit $?
+        fi
+        exit $status
+      fi
+    )
   else
     log "Checksum file not available, skipping verification."
   fi

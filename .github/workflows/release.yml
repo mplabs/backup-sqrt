@@ -31,7 +31,7 @@ jobs:
             scripts \
             docs \
             config
-          sha256sum "dist/backup-sqrt-${TAG}.tar.gz" > "dist/backup-sqrt-${TAG}.tar.gz.sha256"
+          (cd dist && sha256sum "backup-sqrt-${TAG}.tar.gz" > "backup-sqrt-${TAG}.tar.gz.sha256")
 
       - name: Publish release
         uses: softprops/action-gh-release@v1
