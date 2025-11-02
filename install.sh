@@ -119,10 +119,11 @@ install_files() {
   )
 
   install -d "$PROFILES_DIR"
-  if [[ ! -f "$PROFILES_DIR/example.conf" ]]; then
+  if [[ -z "$(find "$PROFILES_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; then
     install -m 0640 "$extract_dir/config/profiles/example.conf" "$PROFILES_DIR/example.conf"
+    log "Seeded example.conf into $PROFILES_DIR"
   else
-    log "example.conf already exists; leaving in place."
+    log "Profiles already present; skipping example seed."
   fi
 
   install -d "$CONFIG_DIR/passphrases"

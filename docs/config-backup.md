@@ -22,6 +22,7 @@ The `backup-configs` helper (installed via `install.sh`, see `docs/install.md`) 
 3. Avoid shell metacharacters; wrap values with spaces in quotes or escape them (`cron_reference="15 2 * * * user cmd"`). For 1Password references that contain spaces, either quote the value or encode spaces as `%20`.
 4. Store the symmetric passphrase in 1Password at the exact reference path you configure.
 5. Place the completed `.conf` files under `/etc/config-backup/profiles/` and install the script at `/usr/local/sbin/backup-configs.sh` (root-readable only).
+6. Temporarily disable a profile by renaming it to `.conf.disabled`; the script logs the skip so you can see which profiles are parked.
 
 ## Running the Backup
 - Manual run: `CONFIG_PROFILES_DIR=/etc/config-backup/profiles /usr/local/sbin/backup-configs`.

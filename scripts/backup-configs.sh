@@ -293,13 +293,23 @@ main() {
   shopt -s nullglob
   local profile_file
   local processed=0
-  for profile_file in "$CONFIG_PROFILES_DIR"/*.conf; do
+  local disabled=0
+  for profile_file in "$CONFIG_PROFILES_DIR"/*.conf "$CONFIG_PROFILES_DIR"/*.conf.disabled; do
+    if [[ "$profile_file" == *.conf.disabled ]]; then
+      ((disabled++))
+      echo "Skipping disabled profile $(basename "$profile_file")"
+      continue
+    fi
     processed=1
     process_profile "$profile_file"
   done
   shopt -u nullglob
   if [[ $processed -eq 0 ]]; then
-    echo "No profile configs found in $CONFIG_PROFILES_DIR."
+    if [[ $disabled -gt 0 ]]; then
+      echo "All profiles in $CONFIG_PROFILES_DIR are disabled (.conf.disabled)."
+    else
+      echo "No profile configs found in $CONFIG_PROFILES_DIR."
+    fi
   fi
 }
 
